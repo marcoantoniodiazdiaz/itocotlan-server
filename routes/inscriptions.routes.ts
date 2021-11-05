@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
 import Inscriptions from '../models/inscriptions.model';
-import Programs from '../models/programs.model';
+import Programs from '../models/proyects.model';
 import Activities from '../models/activities.model';
 import Categories from '../models/categories.model';
 import Students from '../models/students.model';
@@ -12,21 +12,6 @@ app.get('/inscriptions', async (req: Request, res: Response) => {
         const inscriptions = await Inscriptions.findAll({
             attributes: { exclude: ['programId', 'studentId'] },
             include: [
-                {
-                    model: Programs,
-                    attributes: { exclude: ['activityId'] },
-                    include: [
-                        {
-                            model: Activities,
-                            attributes: { exclude: ['categoryId'] },
-                            include: [
-                                {
-                                    model: Categories,
-                                }
-                            ]
-                        }
-                    ]
-                },
                 {
                     model: Students,
                     attributes: { exclude: ['careerId'] },
@@ -53,21 +38,6 @@ app.get('/inscriptions/:id', async (req: Request, res: Response) => {
             attributes: { exclude: ['programId', 'studentId'] },
             include: [
                 {
-                    model: Programs,
-                    attributes: { exclude: ['activityId'] },
-                    include: [
-                        {
-                            model: Activities,
-                            attributes: { exclude: ['categoryId'] },
-                            include: [
-                                {
-                                    model: Categories,
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
                     model: Students,
                     attributes: { exclude: ['careerId'] },
                     include: [
@@ -90,8 +60,8 @@ app.post('/inscriptions', async (req: Request, res: Response) => {
 
     try {
         const inscriptions = await Inscriptions.create({
+            activityId: body.activityId,
             studentId: body.studentId,
-            programId: body.programId,
         });
 
         return res.json({ ok: true, data: inscriptions });
@@ -107,8 +77,9 @@ app.put('/inscriptions/:id', async (req: Request, res: Response) => {
 
     try {
         const inscriptions = await Inscriptions.update({
+            status: body.status,
+            activityId: body.activityId,
             studentId: body.studentId,
-            programId: body.programId,
         }, {
             where: { id }
         });

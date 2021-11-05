@@ -2,16 +2,35 @@ import { Request, Response } from 'express';
 import { router as app } from './router';
 import Activities from '../models/activities.model';
 import Categories from '../models/categories.model';
+import Administrators from '../models/admins.model';
+import Proyects from '../models/proyects.model';
+import Roles from '../models/roles.model';
 
 app.get('/activities', async (req: Request, res: Response) => {
     try {
         const activities = await Activities.findAll({
-            attributes: { exclude: ['categoryId'] },
+            attributes: { exclude: ['createdBy', 'proyectId']},
             include: [
                 {
-                    model: Categories,
+                    model: Administrators,
+                    attributes: { exclude: ['password', 'roleId'] },
+                    as: 'creator',
+                    include: [
+                        {
+                            model: Roles,
+                        }
+                    ],
+                },
+                {
+                    model: Proyects,
+                    attributes: { exclude: ['categoryId'] },
+                    include: [
+                        {
+                            model: Categories,
+                        }
+                    ],
                 }
-            ]
+            ],
         });
         return res.json({ ok: true, data: activities });
     } catch (error) {
@@ -45,7 +64,8 @@ app.post('/activities', async (req: Request, res: Response) => {
     try {
         const activities = await Activities.create({
             name: body.name,
-            categoryId: body.categoryId,
+            createdBy: body.createdBy,
+            proyectId: body.proyectId,
         });
 
         return res.json({ ok: true, data: activities });
@@ -63,6 +83,8 @@ app.put('/activities/:id', async (req: Request, res: Response) => {
         const activities = await Activities.update({
             name: body.name,
             categoryId: body.categoryId,
+            createdBy: body.createdBy,
+            proyectId: body.proyectId,
         }, {
             where: { id }
         });

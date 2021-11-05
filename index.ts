@@ -11,8 +11,10 @@ import admins from './routes/admins.routes';
 import careers from './routes/careers.routes';
 import categories from './routes/categories.routes';
 import inscriptions from './routes/inscriptions.routes';
-import programs from './routes/programs.routes';
+import programs from './routes/proyects.routes';
 import students from './routes/students.routes';
+import checks from './routes/checks.routes';
+import requests from './routes/requests.routes';
 
 // Server instance
 const server = Server.instance;
@@ -35,6 +37,8 @@ server.app.use('/api', categories);
 server.app.use('/api', inscriptions);
 server.app.use('/api', programs);
 server.app.use('/api', students);
+server.app.use('/api', checks);
+server.app.use('/api', requests);
 
 server.start(() => {
     console.log(`✅  Server online in port ${server.port}`);

@@ -9,7 +9,8 @@ Activities.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    // Categories
+    // Proyect
+    // createdBy (Administrator)
 }, {
     sequelize, modelName: "activities",
 });

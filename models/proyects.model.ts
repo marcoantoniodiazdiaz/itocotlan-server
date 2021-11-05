@@ -1,21 +1,21 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database/database';
 
-export class Administrators extends Model { }
+export class Proyects extends Model { }
 
-Administrators.init({
+Proyects.init({
     // Id generado automaticamente
     name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    password: {
-        type: DataTypes.STRING,
+    credits: {
+        type: DataTypes.DOUBLE,
         allowNull: false,
     },
-    // Role
+    // Category
 }, {
-    sequelize, modelName: "Administrators",
+    sequelize, modelName: "proyects",
 });
 
-export default Administrators;
+export default Proyects;

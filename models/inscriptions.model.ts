@@ -5,8 +5,12 @@ export class Inscriptions extends Model { }
 
 Inscriptions.init({
     // Id generado automaticamente
+    status: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+    },
     // Student
-    // Program
+    // Activity
 }, {
     sequelize, modelName: "inscriptions",
 });

@@ -1,31 +1,50 @@
 import Careers from '../models/careers.model';
 import Students from '../models/students.model';
 import Inscriptions from '../models/inscriptions.model';
-import Programs from '../models/programs.model';
+import Programs from '../models/proyects.model';
 import Activities from '../models/activities.model';
 import Categories from '../models/categories.model';
-import Admins from '../models/admins.model';
+import Roles from '../models/roles.model';
+import Administrators from '../models/admins.model';
+import Requests from '../models/requests.model';
+import Proyects from '../models/proyects.model';
+import Checks from '../models/checks.model';
 
 
 
 export const createAssosiations = () => {
 
-    Careers.hasOne(Students);
-    Students.belongsTo(Careers);
+    Roles.hasMany(Administrators);
+    Administrators.belongsTo(Roles);
+
+    Administrators.hasOne(Requests, { foreignKey: 'authorizedBy' });
+    Requests.belongsTo(Administrators, { foreignKey: 'authorizedBy' });
+
+    Administrators.hasOne(Activities, { foreignKey: 'createdBy', as: 'creator' });
+    Activities.belongsTo(Administrators, { foreignKey: 'createdBy', as: 'creator' });
+
+    Proyects.hasMany(Activities);
+    Activities.belongsTo(Proyects);
+
+    Categories.hasMany(Proyects);
+    Proyects.belongsTo(Categories);
+
+    Activities.hasMany(Requests);
+    Requests.belongsTo(Activities);
+
+    Activities.hasMany(Inscriptions);
+    Inscriptions.belongsTo(Activities);
+
+    Inscriptions.hasMany(Checks);
+    Checks.belongsTo(Inscriptions);
 
     Students.hasMany(Inscriptions);
     Inscriptions.belongsTo(Students);
 
-    Programs.hasMany(Inscriptions);
-    Inscriptions.belongsTo(Programs);
+    Careers.hasMany(Students);
+    Students.belongsTo(Careers);
 
-    Activities.hasMany(Programs);
-    Programs.belongsTo(Activities);
-
-    Categories.hasMany(Activities);
-    Activities.belongsTo(Categories);
-
-    Admins.init;
-
+    Administrators.hasOne(Checks, { foreignKey: 'aprove' });
+    Checks.belongsTo(Administrators, { foreignKey: 'aprove' });
 }
 
