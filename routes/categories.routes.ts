@@ -24,7 +24,6 @@ app.get('/categories/:id', async (req: Request, res: Response) => {
 });
 
 app.post('/categories', async (req: Request, res: Response) => {
-
     const body = req.body;
 
     try {

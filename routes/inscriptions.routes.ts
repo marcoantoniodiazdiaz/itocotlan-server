@@ -83,7 +83,7 @@ app.put('/inscriptions/:id', async (req: Request, res: Response) => {
         }, {
             where: { id }
         });
-
+        
         return res.json({ ok: true, data: inscriptions });
     } catch (error) {
         return res.json({ ok: false, error });

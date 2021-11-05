@@ -21,9 +21,9 @@ app.get('/admins', async (req: Request, res: Response) => {
 });
 
 app.get('/admins/:id', async (req: Request, res: Response) => {
-
+    
     const id = req.params.id;
-
+    
     try {
         const admins = await Admins.findByPk(id, {
             attributes: {exclude: ['password', 'roleId'] },
@@ -34,6 +34,15 @@ app.get('/admins/:id', async (req: Request, res: Response) => {
             ],
         });
         return res.json({ ok: true, data: admins });
+    } catch (error) {
+        return res.json({ ok: false, error });
+    }
+});
+
+app.get('/roles', async (req: Request, res: Response) => {
+    try {
+        const roles = await Roles.findAll();
+        return res.json({ ok: true, data: roles });
     } catch (error) {
         return res.json({ ok: false, error });
     }

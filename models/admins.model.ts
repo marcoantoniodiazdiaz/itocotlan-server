@@ -15,7 +15,7 @@ Administrators.init({
     },
     // Role
 }, {
-    sequelize, modelName: "Administrators",
+    sequelize, modelName: "administrators",
 });
 
 export default Administrators;
