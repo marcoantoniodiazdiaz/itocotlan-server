@@ -5,10 +5,12 @@ import Categories from '../models/categories.model';
 import Administrators from '../models/admins.model';
 import Proyects from '../models/proyects.model';
 import Roles from '../models/roles.model';
+import sequelize from '../database/database';
+import Requests from '../models/requests.model';
 
 app.get('/activities', async (req: Request, res: Response) => {
     try {
-        const activities = await Activities.findAll({
+        let activities = await Activities.findAll({
             attributes: { exclude: ['createdBy', 'proyectId']},
             include: [
                 {
@@ -29,9 +31,21 @@ app.get('/activities', async (req: Request, res: Response) => {
                             model: Categories,
                         }
                     ],
-                }
+                },
+                {
+                    model: Requests,
+                },
             ],
         });
+
+        activities = activities.filter((e) => {
+            const requests: Requests[] = e.getDataValue('requests');
+            for (const i of requests) {
+                if (i.getDataValue('authorized')) return true
+            }
+            return false;
+        });
+
         return res.json({ ok: true, data: activities });
     } catch (error) {
         return res.json({ ok: false, error });
@@ -61,15 +75,24 @@ app.post('/activities', async (req: Request, res: Response) => {
 
     const body = req.body;
 
+    const t = await sequelize.transaction();
+
     try {
         const activities = await Activities.create({
             name: body.name,
             createdBy: body.createdBy,
             proyectId: body.proyectId,
-        });
+        }, { transaction: t });
 
+        await Requests.create({
+            description: body.description,
+            activityId: activities.getDataValue('id'),
+        }, { transaction: t })
+
+        await t.commit();
         return res.json({ ok: true, data: activities });
     } catch (error) {
+        await t.rollback();
         return res.json({ ok: false, error });
     }
 });

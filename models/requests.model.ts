@@ -6,7 +6,8 @@ export class Requests extends Model { }
 Requests.init({
     // Id generado automaticamente
     authorized: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: false,
     },
     description: {

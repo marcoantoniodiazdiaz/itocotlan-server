@@ -9,6 +9,13 @@ Administrators.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
+    email: {
+        type: DataTypes.STRING,
+        validate: {
+            isEmail: true,
+        },
+        allowNull: false,
+    },
     password: {
         type: DataTypes.STRING,
         allowNull: false,

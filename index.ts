@@ -14,6 +14,7 @@ import inscriptions from './routes/inscriptions.routes';
 import programs from './routes/proyects.routes';
 import students from './routes/students.routes';
 import checks from './routes/checks.routes';
+import login from './routes/login.routes';
 import requests from './routes/requests.routes';
 
 // Server instance
@@ -38,6 +39,7 @@ server.app.use('/api', inscriptions);
 server.app.use('/api', programs);
 server.app.use('/api', students);
 server.app.use('/api', checks);
+server.app.use('/api', login);
 server.app.use('/api', requests);
 
 server.start(() => {

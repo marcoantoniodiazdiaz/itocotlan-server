@@ -6,11 +6,12 @@ import Categories from '../models/categories.model';
 app.get('/proyects', async (req: Request, res: Response) => {
     try {
         const proyects = await Proyects.findAll({
-            // include: [
-            //     // {
-            //     //     model: Administrators,
-            //     // }
-            // ],
+            attributes: { exclude: ['categoryId'] },
+            include: [
+                {
+                    model: Categories,
+                }
+            ],
         });
         return res.json({ ok: true, data: proyects });
     } catch (error) {
