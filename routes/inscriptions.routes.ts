@@ -6,11 +6,13 @@ import Activities from '../models/activities.model';
 import Categories from '../models/categories.model';
 import Students from '../models/students.model';
 import Careers from '../models/careers.model';
+import Proyects from '../models/proyects.model';
+import Administrators from '../models/admins.model';
 
 app.get('/inscriptions', async (req: Request, res: Response) => {
     try {
         const inscriptions = await Inscriptions.findAll({
-            attributes: { exclude: ['programId', 'studentId'] },
+            attributes: { exclude: ['programId', 'studentId', 'activityId'] },
             include: [
                 {
                     model: Students,
@@ -19,6 +21,21 @@ app.get('/inscriptions', async (req: Request, res: Response) => {
                         {
                             model: Careers,
                         }
+                    ]
+                },
+                {
+                    model: Activities,
+                    attributes: { exclude: ['proyectId'] },
+                    include: [
+                        {
+                            attributes: { exclude: ['categoryId'] },
+                            model: Proyects,
+                            include: [
+                                {
+                                    model: Categories,
+                                },
+                            ]
+                        },
                     ]
                 }
             ]

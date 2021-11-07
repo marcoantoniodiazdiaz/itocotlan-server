@@ -10,6 +10,7 @@ import Roles from '../models/roles.model';
 app.get('/requests', async (req: Request, res: Response) => {
     try {
         const requests = await Requests.findAll({
+            where: { authorized: false },
             attributes: { exclude: ['activityId', 'authorizedBy'] },
             include: [
                 {
@@ -54,6 +55,24 @@ app.get('/requests/:id', async (req: Request, res: Response) => {
 
     try {
         const requests = await Requests.findByPk(id);
+        return res.json({ ok: true, data: requests });
+    } catch (error) {
+        return res.json({ ok: false, error });
+    }
+});
+
+app.post('/requests/authorize', async (req: Request, res: Response) => {
+
+    const body = req.body;
+    const { requestId, administrator } = body;
+
+    try {
+        const requests = await Requests.update({
+            authorized: true,
+            authorizedBy: administrator
+        }, {
+            where: { id: requestId },
+        });
         return res.json({ ok: true, data: requests });
     } catch (error) {
         return res.json({ ok: false, error });

@@ -58,6 +58,7 @@ app.post('/admins', async (req: Request, res: Response) => {
 
         const admins = await Admins.create({
             name: body.name,
+            email: body.email,
             password: encryped,
             roleId: body.roleId,
         });
