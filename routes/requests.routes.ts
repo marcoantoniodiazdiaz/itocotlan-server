@@ -79,6 +79,23 @@ app.post('/requests/authorize', async (req: Request, res: Response) => {
     }
 });
 
+app.post('/requests/reject', async (req: Request, res: Response) => {
+
+    const body = req.body;
+    const { requestId } = body;
+
+    try {
+        const requests = await Requests.update({
+            authorized: false,
+        }, {
+            where: { id: requestId },
+        });
+        return res.json({ ok: true, data: requests });
+    } catch (error) {
+        return res.json({ ok: false, error });
+    }
+});
+
 app.put('/requests/:id', async (req: Request, res: Response) => {
 
     const body = req.body;

@@ -18,6 +18,10 @@ Students.init({
         type: DataTypes.TINYINT,
         allowNull: false,
     },
+    period: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 }, {
     sequelize, modelName: "students",
 });

@@ -48,6 +48,7 @@ app.post('/students', async (req: Request, res: Response) => {
             control: body.control,
             name: body.name,
             gender: body.gender,
+            period: body.period,
             careerId: body.careerId,
         });
 
