@@ -9,8 +9,8 @@ import Administrators from '../models/admins.model';
 import Requests from '../models/requests.model';
 import Proyects from '../models/proyects.model';
 import Checks from '../models/checks.model';
-
-
+import Evaluations from '../models/evaluations.model';
+import Questions from '../models/questions.model';
 
 export const createAssosiations = () => {
 
@@ -46,5 +46,11 @@ export const createAssosiations = () => {
 
     Administrators.hasOne(Checks, { foreignKey: 'aprove' });
     Checks.belongsTo(Administrators, { foreignKey: 'aprove' });
+
+    Questions.hasMany(Evaluations);
+    Evaluations.belongsTo(Questions);
+
+    Inscriptions.hasMany(Evaluations);
+    Evaluations.belongsTo(Questions);
 }
 

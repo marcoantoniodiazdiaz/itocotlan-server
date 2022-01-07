@@ -16,7 +16,7 @@ import students from './routes/students.routes';
 import checks from './routes/checks.routes';
 import login from './routes/login.routes';
 import requests from './routes/requests.routes';
-
+import questions from './routes/questions.routes';
 // Server instance
 const server = Server.instance;
 
@@ -41,6 +41,7 @@ server.app.use('/api', students);
 server.app.use('/api', checks);
 server.app.use('/api', login);
 server.app.use('/api', requests);
+server.app.use('/api', questions);
 
 server.start(() => {
     console.log(`✅  Server online in port ${server.port}`);
