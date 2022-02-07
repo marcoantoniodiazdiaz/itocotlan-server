@@ -9,6 +9,10 @@ Activities.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
+    credits: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+    },
     // Proyect
     // createdBy (Administrator)
 }, {

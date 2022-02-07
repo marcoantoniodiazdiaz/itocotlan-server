@@ -78,10 +78,18 @@ app.post('/activities', async (req: Request, res: Response) => {
     const t = await sequelize.transaction();
 
     try {
+
+        // const sum = await Proyects.sum('credits', { where: { categoryId: body.categoryId } });
+
+        // if (sum + +body.credits > 2) {
+        //     throw 'Se supera la cantidad permitida para esta categoria';
+        // }
+
         const activities = await Activities.create({
             name: body.name,
             createdBy: body.createdBy,
             proyectId: body.proyectId,
+            credits: body.credits,
         }, { transaction: t });
 
         await Requests.create({

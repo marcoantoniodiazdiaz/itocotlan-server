@@ -42,16 +42,8 @@ app.post('/proyects', async (req: Request, res: Response) => {
     const body = req.body;
 
     try {
-
-        const sum = await Proyects.sum('credits', { where: { categoryId: body.categoryId } });
-
-        if (sum + +body.credits > 2) {
-            return res.json({ ok: false, error: 'Se supera la cantidad permitida para esta categoria' });
-        }
-
         const proyects = await Proyects.create({
             name: body.name,
-            credits: body.credits,
             categoryId: body.categoryId,
         });
 
