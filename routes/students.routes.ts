@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
 import Students from '../models/students.model';
-import Categories from '../models/categories.model';
 import Careers from '../models/careers.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/students', async (req: Request, res: Response) => {
+app.get('/students', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const students = await Students.findAll({
             attributes: { exclude: ['careerId'] },
@@ -20,7 +20,7 @@ app.get('/students', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/students/:id', async (req: Request, res: Response) => {
+app.get('/students/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -39,7 +39,7 @@ app.get('/students/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/students', async (req: Request, res: Response) => {
+app.post('/students', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -58,7 +58,7 @@ app.post('/students', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/students/:id', async (req: Request, res: Response) => {
+app.put('/students/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -79,7 +79,7 @@ app.put('/students/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/students/:id', async (req: Request, res: Response) => {
+app.delete('/students/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

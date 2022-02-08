@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
 import Categories from '../models/categories.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/categories', async (req: Request, res: Response) => {
+app.get('/categories', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const categories = await Categories.findAll();
         return res.json({ ok: true, data: categories });
@@ -11,7 +12,7 @@ app.get('/categories', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/categories/:id', async (req: Request, res: Response) => {
+app.get('/categories/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -23,7 +24,7 @@ app.get('/categories/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/categories', async (req: Request, res: Response) => {
+app.post('/categories', [tokenValidation], async (req: Request, res: Response) => {
     const body = req.body;
 
     try {
@@ -37,7 +38,7 @@ app.post('/categories', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/categories/:id', async (req: Request, res: Response) => {
+app.put('/categories/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -55,7 +56,7 @@ app.put('/categories/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/categories/:id', async (req: Request, res: Response) => {
+app.delete('/categories/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

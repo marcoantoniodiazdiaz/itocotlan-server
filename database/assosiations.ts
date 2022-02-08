@@ -52,5 +52,9 @@ export const createAssosiations = () => {
 
     Inscriptions.hasMany(Evaluations);
     Evaluations.belongsTo(Questions);
+
+    Administrators.hasMany(Activities);
+    Activities.belongsTo(Administrators);
 }
+
 

@@ -3,8 +3,9 @@ import { router as app } from './router';
 import Admins from '../models/admins.model';
 import bcrypt from 'bcrypt';
 import Roles from '../models/roles.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/admins', async (req: Request, res: Response) => {
+app.get('/admins', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const admins = await Admins.findAll({
             attributes: {exclude: ['password', 'roleId'] },
@@ -20,7 +21,7 @@ app.get('/admins', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/admins/:id', async (req: Request, res: Response) => {
+app.get('/admins/:id', [tokenValidation], async (req: Request, res: Response) => {
     
     const id = req.params.id;
     
@@ -39,7 +40,7 @@ app.get('/admins/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/roles', async (req: Request, res: Response) => {
+app.get('/roles', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const roles = await Roles.findAll();
         return res.json({ ok: true, data: roles });
@@ -48,7 +49,7 @@ app.get('/roles', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/admins', async (req: Request, res: Response) => {
+app.post('/admins', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -69,7 +70,7 @@ app.post('/admins', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/admins/:id', async (req: Request, res: Response) => {
+app.put('/admins/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -89,7 +90,7 @@ app.put('/admins/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/admins/:id', async (req: Request, res: Response) => {
+app.delete('/admins/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

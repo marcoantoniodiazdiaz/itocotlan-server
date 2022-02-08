@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
 import Careers from '../models/careers.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/careers', async (req: Request, res: Response) => {
+app.get('/careers', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const careers = await Careers.findAll();
         return res.json({ ok: true, data: careers });
@@ -11,7 +12,7 @@ app.get('/careers', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/careers/:id', async (req: Request, res: Response) => {
+app.get('/careers/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -23,7 +24,7 @@ app.get('/careers/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/careers', async (req: Request, res: Response) => {
+app.post('/careers', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -38,7 +39,7 @@ app.post('/careers', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/careers/:id', async (req: Request, res: Response) => {
+app.put('/careers/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -56,7 +57,7 @@ app.put('/careers/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/careers/:id', async (req: Request, res: Response) => {
+app.delete('/careers/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
-import questions from '../models/questions.model';
 import Questions from '../models/questions.model';
 import Evaluations from '../models/evaluations.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/questions', async (req: Request, res: Response) => {
+app.get('/questions',  [tokenValidation], async (req: Request, res: Response) => {
     try {
         const questions = await Questions.findAll();
         return res.json({ ok: true, data: questions });
@@ -13,7 +13,7 @@ app.get('/questions', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/questions/:id', async (req: Request, res: Response) => {
+app.get('/questions/:id',  [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -25,7 +25,7 @@ app.get('/questions/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/questions/inscription/:id', async (req: Request, res: Response) => {
+app.get('/questions/inscription/:id',  [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -44,7 +44,7 @@ app.get('/questions/inscription/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/questions', async (req: Request, res: Response) => {
+app.post('/questions',  [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -59,7 +59,7 @@ app.post('/questions', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/questions/evaluation', async (req: Request, res: Response) => {
+app.post('/questions/evaluation',  [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -84,7 +84,7 @@ app.post('/questions/evaluation', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/questions/:id', async (req: Request, res: Response) => {
+app.put('/questions/:id',  [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -102,7 +102,7 @@ app.put('/questions/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/questions/:id', async (req: Request, res: Response) => {
+app.delete('/questions/:id',  [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

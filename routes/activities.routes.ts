@@ -7,8 +7,9 @@ import Proyects from '../models/proyects.model';
 import Roles from '../models/roles.model';
 import sequelize from '../database/database';
 import Requests from '../models/requests.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/activities', async (req: Request, res: Response) => {
+app.get('/activities', [tokenValidation], async (req: Request, res: Response) => {
     try {
         let activities = await Activities.findAll({
             attributes: { exclude: ['createdBy', 'proyectId']},
@@ -52,7 +53,7 @@ app.get('/activities', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/activities/:id', async (req: Request, res: Response) => {
+app.get('/activities/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -71,24 +72,18 @@ app.get('/activities/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/activities', async (req: Request, res: Response) => {
+app.post('/activities', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
     const t = await sequelize.transaction();
 
     try {
-
-        // const sum = await Proyects.sum('credits', { where: { categoryId: body.categoryId } });
-
-        // if (sum + +body.credits > 2) {
-        //     throw 'Se supera la cantidad permitida para esta categoria';
-        // }
-
         const activities = await Activities.create({
             name: body.name,
             createdBy: body.createdBy,
             proyectId: body.proyectId,
+            administratorId: body.administratorId,
             credits: body.credits,
         }, { transaction: t });
 
@@ -105,7 +100,7 @@ app.post('/activities', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/activities/:id', async (req: Request, res: Response) => {
+app.put('/activities/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -126,7 +121,7 @@ app.put('/activities/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/activities/:id', async (req: Request, res: Response) => {
+app.delete('/activities/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

@@ -19,7 +19,7 @@ Students.init({
         allowNull: false,
     },
     period: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
 }, {

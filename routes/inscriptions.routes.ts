@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
 import Inscriptions from '../models/inscriptions.model';
-import Programs from '../models/proyects.model';
 import Activities from '../models/activities.model';
 import Categories from '../models/categories.model';
 import Students from '../models/students.model';
 import Careers from '../models/careers.model';
 import Proyects from '../models/proyects.model';
-import Administrators from '../models/admins.model';
+import { Op } from 'sequelize';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/inscriptions', async (req: Request, res: Response) => {
+app.get('/inscriptions', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const inscriptions = await Inscriptions.findAll({
             attributes: { exclude: ['programId', 'studentId', 'activityId'] },
@@ -46,7 +46,7 @@ app.get('/inscriptions', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/inscriptions/:id', async (req: Request, res: Response) => {
+app.get('/inscriptions/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -62,6 +62,21 @@ app.get('/inscriptions/:id', async (req: Request, res: Response) => {
                             model: Careers,
                         }
                     ]
+                },
+                {
+                    model: Activities,
+                    attributes: { exclude: ['proyectId'] },
+                    include: [
+                        {
+                            attributes: { exclude: ['categoryId'] },
+                            model: Proyects,
+                            include: [
+                                {
+                                    model: Categories,
+                                },
+                            ]
+                        },
+                    ]
                 }
             ]
         });
@@ -71,7 +86,48 @@ app.get('/inscriptions/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/inscriptions', async (req: Request, res: Response) => {
+app.get('/inscriptions/filter/:cantMin/:cantMax/:perMin/:perMax', [tokenValidation], async (req: Request, res: Response) => {
+    
+    const { cantMin, cantMax, perMin, perMax } = req.params;
+
+
+    const students = await Students.findAll({
+        where: {
+            period: {
+                [Op.gte]: perMin,
+                [Op.lte]: perMax,
+            }
+        },
+        include: [
+            {
+                model: Careers,
+            }
+        ]
+    });
+
+    const data: any[] = []
+
+    for (const student of students) {
+        const count = await Inscriptions.count({
+            where: {
+                studentId: student.getDataValue('id'),
+                status: 1,
+            },
+        });
+
+        if (cantMin <= count && cantMax >= count) {
+            data.push(student)
+        }
+    }
+    
+    try {
+        return res.json({ ok: true, data });
+    } catch (error) {
+        return res.json({ ok: false, error });
+    }
+});
+
+app.post('/inscriptions', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -87,7 +143,7 @@ app.post('/inscriptions', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/inscriptions/:id', async (req: Request, res: Response) => {
+app.put('/inscriptions/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -107,7 +163,7 @@ app.put('/inscriptions/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/inscriptions/:id', async (req: Request, res: Response) => {
+app.delete('/inscriptions/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

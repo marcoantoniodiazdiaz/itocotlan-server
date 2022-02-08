@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { router as app } from './router';
 import Checks from '../models/checks.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/checks', async (req: Request, res: Response) => {
+app.get('/checks', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const checks = await Checks.findAll();
         return res.json({ ok: true, data: checks });
@@ -11,7 +12,7 @@ app.get('/checks', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/checks/:id', async (req: Request, res: Response) => {
+app.get('/checks/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -23,7 +24,7 @@ app.get('/checks/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/checks', async (req: Request, res: Response) => {
+app.post('/checks', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
 
@@ -39,7 +40,7 @@ app.post('/checks', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/checks/:id', async (req: Request, res: Response) => {
+app.put('/checks/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -58,7 +59,7 @@ app.put('/checks/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/checks/:id', async (req: Request, res: Response) => {
+app.delete('/checks/:id', [tokenValidation], async (req: Request, res: Response) => {
 
     const id = req.params.id;
 

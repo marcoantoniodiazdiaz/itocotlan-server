@@ -6,8 +6,9 @@ import Administrators from '../models/admins.model';
 import Proyects from '../models/proyects.model';
 import Categories from '../models/categories.model';
 import Roles from '../models/roles.model';
+import { tokenValidation } from '../middlewares/auth.middleware';
 
-app.get('/requests', async (req: Request, res: Response) => {
+app.get('/requests', [tokenValidation],async (req: Request, res: Response) => {
     try {
         const requests = await Requests.findAll({
             where: { authorized: false },
@@ -49,7 +50,7 @@ app.get('/requests', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/requests/:id', async (req: Request, res: Response) => {
+app.get('/requests/:id', [tokenValidation],async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
@@ -61,7 +62,7 @@ app.get('/requests/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/requests/authorize', async (req: Request, res: Response) => {
+app.post('/requests/authorize', [tokenValidation],async (req: Request, res: Response) => {
 
     const body = req.body;
     const { requestId, administrator } = body;
@@ -79,7 +80,7 @@ app.post('/requests/authorize', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/requests/reject', async (req: Request, res: Response) => {
+app.post('/requests/reject', [tokenValidation],async (req: Request, res: Response) => {
 
     const body = req.body;
     const { requestId } = body;
@@ -96,7 +97,7 @@ app.post('/requests/reject', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/requests/:id', async (req: Request, res: Response) => {
+app.put('/requests/:id', [tokenValidation],async (req: Request, res: Response) => {
 
     const body = req.body;
     const id = req.params.id;
@@ -114,7 +115,7 @@ app.put('/requests/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/requests/:id', async (req: Request, res: Response) => {
+app.delete('/requests/:id', [tokenValidation],async (req: Request, res: Response) => {
 
     const id = req.params.id;
 
