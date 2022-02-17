@@ -11,6 +11,7 @@ import Proyects from '../models/proyects.model';
 import Checks from '../models/checks.model';
 import Evaluations from '../models/evaluations.model';
 import Questions from '../models/questions.model';
+import Configs from '../models/config.model';
 
 export const createAssosiations = () => {
 
@@ -55,6 +56,8 @@ export const createAssosiations = () => {
 
     Administrators.hasMany(Activities);
     Activities.belongsTo(Administrators);
+
+    Configs.init;
 }
 
 
