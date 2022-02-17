@@ -3,18 +3,32 @@ import { router as app } from './router';
 import Students from '../models/students.model';
 import Careers from '../models/careers.model';
 import { tokenValidation } from '../middlewares/auth.middleware';
+import Inscriptions from '../models/inscriptions.model';
 
 app.get('/students', [tokenValidation], async (req: Request, res: Response) => {
     try {
         const students = await Students.findAll({
-            attributes: { exclude: ['careerId'] },
+            attributes: {
+                exclude: ['careerId'],
+            },
             include: [
                 {
                     model: Careers,
                 }
             ]
         });
-        return res.json({ ok: true, data: students });
+
+        const data: { student: Students, credits: number }[] = [];
+
+        for (const student of students) {
+            const credits = await Inscriptions.count({
+                where: { studentId: student.getDataValue('id'), status: 1 }
+            });
+
+            data.push({student, credits});
+        }
+
+        return res.json({ ok: true, data });
     } catch (error) {
         return res.json({ ok: false, error });
     }

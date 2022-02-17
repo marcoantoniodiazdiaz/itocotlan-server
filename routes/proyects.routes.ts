@@ -50,6 +50,7 @@ app.post('/proyects',  [tokenValidation], async (req: Request, res: Response) =>
 
         return res.json({ ok: true, data: proyects });
     } catch (error) {
+        console.log(error)
         return res.json({ ok: false, error });
     }
 });

@@ -88,39 +88,39 @@ app.get('/inscriptions/:id', [tokenValidation], async (req: Request, res: Respon
 
 app.get('/inscriptions/filter/:cantMin/:cantMax/:perMin/:perMax', [tokenValidation], async (req: Request, res: Response) => {
     
-    const { cantMin, cantMax, perMin, perMax } = req.params;
+    try {
+        const { cantMin, cantMax, perMin, perMax } = req.params;
 
 
-    const students = await Students.findAll({
-        where: {
-            period: {
-                [Op.gte]: perMin,
-                [Op.lte]: perMax,
-            }
-        },
-        include: [
-            {
-                model: Careers,
-            }
-        ]
-    });
-
-    const data: any[] = []
-
-    for (const student of students) {
-        const count = await Inscriptions.count({
+        const students = await Students.findAll({
             where: {
-                studentId: student.getDataValue('id'),
-                status: 1,
+                period: {
+                    [Op.gte]: perMin,
+                    [Op.lte]: perMax,
+                }
             },
+            include: [
+                {
+                    model: Careers,
+                }
+            ]
         });
 
-        if (cantMin <= count && cantMax >= count) {
-            data.push(student)
+        const data: { student: Students, credits: number }[] = [];
+
+        for (const student of students) {
+            const credits = await Inscriptions.count({
+                where: {
+                    studentId: student.getDataValue('id'),
+                    status: 1,
+                },
+            });
+
+            if (cantMin <= credits && cantMax >= credits) {
+                data.push({ student, credits })
+            }
         }
-    }
     
-    try {
         return res.json({ ok: true, data });
     } catch (error) {
         return res.json({ ok: false, error });
