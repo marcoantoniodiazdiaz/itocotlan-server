@@ -16,7 +16,6 @@ export const tokenValidation = (req: any, res: any, next: Function) => {
         }
 
         req.data = decoded.user;
-        console.log(req.data)
         next();
     });
 };

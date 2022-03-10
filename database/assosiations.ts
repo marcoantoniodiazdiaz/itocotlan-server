@@ -15,47 +15,47 @@ import Configs from '../models/config.model';
 
 export const createAssosiations = () => {
 
-    Roles.hasMany(Administrators);
-    Administrators.belongsTo(Roles);
+    Roles.hasMany(Administrators, { onDelete: 'CASCADE' } );
+    Administrators.belongsTo(Roles, { onDelete: 'CASCADE' });
 
-    Administrators.hasOne(Requests, { foreignKey: 'authorizedBy' });
-    Requests.belongsTo(Administrators, { foreignKey: 'authorizedBy' });
+    Administrators.hasOne(Requests, { foreignKey: 'authorizedBy', onDelete: 'CASCADE' });
+    Requests.belongsTo(Administrators, { foreignKey: 'authorizedBy', onDelete: 'CASCADE' });
 
-    Administrators.hasOne(Activities, { foreignKey: 'createdBy', as: 'creator' });
-    Activities.belongsTo(Administrators, { foreignKey: 'createdBy', as: 'creator' });
+    Administrators.hasOne(Activities, { foreignKey: 'createdBy', as: 'creator', onDelete: 'CASCADE' });
+    Activities.belongsTo(Administrators, { foreignKey: 'createdBy', as: 'creator', onDelete: 'CASCADE' });
 
-    Proyects.hasMany(Activities);
-    Activities.belongsTo(Proyects);
+    Proyects.hasMany(Activities, { onDelete: 'CASCADE' });
+    Activities.belongsTo(Proyects, { onDelete: 'CASCADE' });
 
-    Categories.hasMany(Proyects);
-    Proyects.belongsTo(Categories);
+    Categories.hasMany(Proyects, { onDelete: 'CASCADE' });
+    Proyects.belongsTo(Categories, { onDelete: 'CASCADE' });
 
-    Activities.hasMany(Requests);
-    Requests.belongsTo(Activities);
+    Activities.hasMany(Requests, { onDelete: 'CASCADE' });
+    Requests.belongsTo(Activities, { onDelete: 'CASCADE' });
 
-    Activities.hasMany(Inscriptions);
-    Inscriptions.belongsTo(Activities);
+    Activities.hasMany(Inscriptions, { onDelete: 'CASCADE' });
+    Inscriptions.belongsTo(Activities, { onDelete: 'CASCADE' });
 
-    Inscriptions.hasMany(Checks);
-    Checks.belongsTo(Inscriptions);
+    Inscriptions.hasMany(Checks, { onDelete: 'CASCADE' });
+    Checks.belongsTo(Inscriptions, { onDelete: 'CASCADE' });
 
-    Students.hasMany(Inscriptions);
-    Inscriptions.belongsTo(Students);
+    Students.hasMany(Inscriptions, { onDelete: 'CASCADE' });
+    Inscriptions.belongsTo(Students, { onDelete: 'CASCADE' });
 
-    Careers.hasMany(Students);
-    Students.belongsTo(Careers);
+    Careers.hasMany(Students, { onDelete: 'CASCADE' });
+    Students.belongsTo(Careers, { onDelete: 'CASCADE' });
 
-    Administrators.hasOne(Checks, { foreignKey: 'aprove' });
-    Checks.belongsTo(Administrators, { foreignKey: 'aprove' });
+    Administrators.hasOne(Checks, { foreignKey: 'aprove', onDelete: 'CASCADE' });
+    Checks.belongsTo(Administrators, { foreignKey: 'aprove', onDelete: 'CASCADE' });
 
-    Questions.hasMany(Evaluations);
-    Evaluations.belongsTo(Questions);
+    Questions.hasMany(Evaluations, { onDelete: 'CASCADE' });
+    Evaluations.belongsTo(Questions, { onDelete: 'CASCADE' });
 
-    Inscriptions.hasMany(Evaluations);
-    Evaluations.belongsTo(Questions);
+    Inscriptions.hasMany(Evaluations, { onDelete: 'CASCADE' });
+    Evaluations.belongsTo(Questions, { onDelete: 'CASCADE' });
 
-    Administrators.hasMany(Activities);
-    Activities.belongsTo(Administrators);
+    Administrators.hasMany(Activities, { onDelete: 'CASCADE' });
+    Activities.belongsTo(Administrators, { onDelete: 'CASCADE' });
 
     Configs.init;
 }

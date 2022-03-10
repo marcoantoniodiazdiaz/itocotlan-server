@@ -75,10 +75,12 @@ app.put('/admins/:id', [tokenValidation], async (req: Request, res: Response) =>
     const body = req.body;
     const id = req.params.id;
 
+    const encryped = bcrypt.hashSync(body.password, 10);
+
     try {
         const admins = await Admins.update({
             name: body.name,
-            password: body.password,
+            password: encryped,
             roleId: body.roleId,
         }, {
             where: { id }

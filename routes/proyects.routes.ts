@@ -63,7 +63,6 @@ app.put('/proyects/:id',  [tokenValidation], async (req: Request, res: Response)
     try {
         const proyects = await Proyects.update({
             name: body.name,
-            credits: body.credits,
             categoryId: body.categoryId,
         }, {
             where: { id }
